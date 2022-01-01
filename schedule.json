@@ -1,0 +1,27 @@
+{
+  "heartbeat": {
+    "command": "echo",
+    "args": "still alive",
+    "cron": {
+      "second": 3
+    }
+  },
+  "current_day": {
+    "command": "date",
+    "cron": {
+      "hour": 24
+    }
+  },
+  "list_files_and_directories": {
+    "command": "ls",
+    "args": [
+      "-l",
+      "-a",
+      "-h"
+    ],
+    "cron": {
+      "minute": 1,
+      "second": 10
+    }
+  }
+}

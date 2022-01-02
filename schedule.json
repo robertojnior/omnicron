@@ -2,13 +2,13 @@
   "heartbeat": {
     "command": "echo",
     "args": "still alive",
-    "cron": {
+    "interval": {
       "second": 3
     }
   },
   "current_day": {
     "command": "date",
-    "cron": {
+    "interval": {
       "hour": 24
     }
   },
@@ -19,7 +19,7 @@
       "-a",
       "-h"
     ],
-    "cron": {
+    "interval": {
       "minute": 1,
       "second": 10
     }

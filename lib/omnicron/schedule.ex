@@ -1,5 +1,5 @@
 defmodule Omnicron.Schedule do
-  alias Omnicron.Schedule.Cron
+  alias Omnicron.Schedule.Interval
   alias Omnicron.Schedule.Task, as: ScheduleTask
 
   def tasks(filepath) do
@@ -15,22 +15,22 @@ defmodule Omnicron.Schedule do
     end
   end
 
-  defp task({name, %{"command" => command, "cron" => cron, "args" => args}}) do
+  defp task({name, %{"command" => command, "interval" => interval, "args" => args}}) do
     command_with_args = ScheduleTask.command_with_args(command, args)
 
-    %ScheduleTask{name: name, command: command_with_args, interval: interval(cron)}
+    %ScheduleTask{name: name, command: command_with_args, interval: task_interval(interval)}
   end
 
-  defp task({name, %{"command" => command, "cron" => cron}}) do
-    %ScheduleTask{name: name, command: command, interval: interval(cron)}
+  defp task({name, %{"command" => command, "interval" => interval}}) do
+    %ScheduleTask{name: name, command: command, interval: task_interval(interval)}
   end
 
-  defp interval(cron) do
-    %Cron{
-      hour: Map.get(cron, "hour", 0),
-      minute: Map.get(cron, "minute", 0),
-      second: Map.get(cron, "second", 0)
+  defp task_interval(interval) do
+    %Interval{
+      hour: Map.get(interval, "hour", 0),
+      minute: Map.get(interval, "minute", 0),
+      second: Map.get(interval, "second", 0)
     }
-    |> Cron.interval()
+    |> Interval.milliseconds()
   end
 end

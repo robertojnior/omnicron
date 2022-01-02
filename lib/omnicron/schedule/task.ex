@@ -1,19 +1,14 @@
 defmodule Omnicron.Schedule.Task do
-  @enforce_keys [:name, :command, :cron]
-  defstruct [:name, :command, args: [], cron: __MODULE__.Cron]
+  @enforce_keys [:name, :command, :interval]
+  defstruct [:name, :command, :interval]
 
-  defmodule __MODULE__.Cron do
-    @hour_in_minutes 60
-    @second_in_milliseconds 1000
-
-    defstruct hour: 0, minute: 0, second: 0
-
-    def interval(%__MODULE__{} = cron) do
-      minutes = cron.minute + cron.hour * @hour_in_minutes
-
-      seconds = cron.second + minutes * @hour_in_minutes
-
-      seconds * @second_in_milliseconds
-    end
+  def command_with_args(command, argument) when is_binary(command) and is_binary(argument) do
+    "#{command} #{argument}"
   end
+
+  def command_with_args(command, [head | tail]) when is_binary(command) do
+    command_with_args("#{command} #{head}", tail)
+  end
+
+  def command_with_args(command, []) when is_binary(command), do: command
 end

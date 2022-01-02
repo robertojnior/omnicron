@@ -34,16 +34,16 @@ defmodule Omnicron.Job do
     {:noreply, tasks}
   end
 
-  def schedule_task(%Task{} = task) do
-    Process.send_after(self(), {:execute, task}, task.interval)
-  end
-
   def execute_task(%Task{} = task) do
     {res, _} = System.cmd(task.command, task.args)
 
     IO.puts(task.name)
     IO.puts(res)
 
+    schedule_task(task)
+  end
+
+  def schedule_task(%Task{} = task) do
     Process.send_after(self(), {:execute, task}, task.interval)
   end
 end

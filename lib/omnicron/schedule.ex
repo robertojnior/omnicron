@@ -1,6 +1,10 @@
 defmodule Omnicron.Schedule do
   alias Omnicron.Schedule.Interval
-  alias Omnicron.Schedule.Task, as: ScheduleTask
+
+  defmodule __MODULE__.Task do
+    @enforce_keys [:name, :command, :interval]
+    defstruct [:name, :command, :interval, args: []]
+  end
 
   def tasks(filepath) do
     filepath
@@ -17,15 +21,20 @@ defmodule Omnicron.Schedule do
 
   defp task({name, %{"command" => command, "interval" => interval, "args" => args}})
        when not is_list(args) do
-    %ScheduleTask{name: name, command: command, args: [args], interval: task_interval(interval)}
+    %__MODULE__.Task{
+      name: name,
+      command: command,
+      args: [args],
+      interval: task_interval(interval)
+    }
   end
 
   defp task({name, %{"command" => command, "interval" => interval, "args" => args}}) do
-    %ScheduleTask{name: name, command: command, args: args, interval: task_interval(interval)}
+    %__MODULE__.Task{name: name, command: command, args: args, interval: task_interval(interval)}
   end
 
   defp task({name, %{"command" => command, "interval" => interval}}) do
-    %ScheduleTask{name: name, command: command, interval: task_interval(interval)}
+    %__MODULE__.Task{name: name, command: command, interval: task_interval(interval)}
   end
 
   defp task_interval(interval) do

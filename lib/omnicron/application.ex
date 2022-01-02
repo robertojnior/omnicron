@@ -10,8 +10,9 @@ defmodule Omnicron.Application do
     children = [
       # Starts a worker by calling: Omnicron.Worker.start_link(arg)
       # {Omnicron.Worker, arg}
-      {Omnicron.Crontab, Application.fetch_env!(:omnicron, :schedule)},
-      Omnicron.Job
+      Application.fetch_env!(:omnicron, :schedule)
+      |> Omnicron.Crontab.child_spec(),
+      Omnicron.Job.child_spec([])
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

@@ -15,10 +15,13 @@ defmodule Omnicron.Schedule do
     end
   end
 
-  defp task({name, %{"command" => command, "interval" => interval, "args" => args}}) do
-    command_with_args = ScheduleTask.command_with_args(command, args)
+  defp task({name, %{"command" => command, "interval" => interval, "args" => args}})
+       when not is_list(args) do
+    %ScheduleTask{name: name, command: command, args: [args], interval: task_interval(interval)}
+  end
 
-    %ScheduleTask{name: name, command: command_with_args, interval: task_interval(interval)}
+  defp task({name, %{"command" => command, "interval" => interval, "args" => args}}) do
+    %ScheduleTask{name: name, command: command, args: args, interval: task_interval(interval)}
   end
 
   defp task({name, %{"command" => command, "interval" => interval}}) do

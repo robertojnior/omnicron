@@ -1,6 +1,6 @@
 defmodule Omnicron.Schedule.Task do
   @enforce_keys [:name, :command, :interval]
-  defstruct [:name, :command, :interval]
+  defstruct [:name, :command, :interval, args: []]
 
   def command_with_args(command, argument) when is_binary(command) and is_binary(argument) do
     "#{command} #{argument}"
